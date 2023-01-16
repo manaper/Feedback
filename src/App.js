@@ -4,34 +4,40 @@ import FeedbackData from './data/FeedBackData'
 import FeedbackStats from './components/FeedbackStats'
 import FeedbackForm from './components/FeedbackForm'
 import FeedbackList from './components/FeedbackList';
-import {v4 as uuid} from 'uuid'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import AboutPage from './pages/AboutPage'
+import { FaQuestion } from 'react-icons/fa'
+import AboutIconLink from './components/shared/AboutIconLink'
+import { FeedbackProvider } from './context/FeedbackContext'
 
 function App() {
 
-    const [feedback, setFeedback] = useState(FeedbackData);
-    
-    const handleDelete = (id) => {
-        if(window.confirm('Are you sure to delete')){
-            setFeedback(feedback.filter(a=>a.id !== id))
-        }
-    }
 
-    const addFeedback= (newFeedback) =>{
-        newFeedback.id = uuid();
-        setFeedback([newFeedback,...feedback])
-    }
+
+
 
     return (
-        <>
+        <FeedbackProvider>
+        <Router>
             <Header />
             <div className='container'>
-                <FeedbackForm handleAdd = {addFeedback}/>
-                <FeedbackStats feedback={feedback}/>
-                <FeedbackList 
-                handleDelete={handleDelete}
-                feedback = {feedback} />
-            </div>
-        </>
+                <Routes>
+                    <Route exact path='/' element={
+                        <>
+                            <FeedbackForm />
+                            <FeedbackStats/>
+                            <FeedbackList/>
+                        </>
+                    }>
+
+                    </Route>
+                    <Route path='/about' element={<AboutPage />} />
+                </Routes>
+                </div>
+                <AboutIconLink /> 
+
+        </Router>
+        </FeedbackProvider>
     )
 }
 
